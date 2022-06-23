@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { RequestParameters } from './shared/interfaces/interfaces';
+import { ApiService } from './shared/services/index';
 
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
-  styleUrls: [ './app.component.css' ]
+  styleUrls: ['./app.component.css'],
 })
-export class AppComponent  {
- 
-}
+export class AppComponent {}

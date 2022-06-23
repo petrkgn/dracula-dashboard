@@ -5,10 +5,10 @@ export type MethodTypes = 'GET' | 'POST' | 'PUT' | 'DELITE';
 export interface RequestParameters {
   method: MethodTypes;
   url: string;
-  oprions?: {
+  options?: {
     body?: unknown;
     headers?: HttpHeaders;
     params?: HttpParams;
-    observe: 'body' | 'response';
+    observe?: 'body' | 'response';
   };
 }

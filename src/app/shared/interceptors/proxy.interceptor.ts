@@ -13,7 +13,7 @@ export class ProxyInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (req.url.includes('/\?(.*)/')) {
+    if (req.url.match(/\?(.*)/)) {
       const newsReq = req.clone({
         url: `https://api.allorigins.win/get?url=${encodeURIComponent(
           req.urlWithParams
