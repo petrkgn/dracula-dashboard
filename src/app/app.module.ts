@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
+import { WeatherWidgetComponent } from './widgets/weather-widget/weather-widget.component';
 
 @NgModule({
   imports: [BrowserModule, FormsModule, SharedModule],
-  declarations: [AppComponent],
+  declarations: [AppComponent, WeatherWidgetComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
