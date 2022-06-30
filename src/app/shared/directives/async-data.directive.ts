@@ -6,25 +6,25 @@ import {
   OnInit,
   TemplateRef,
   ViewContainerRef,
-} from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { delay, takeUntil } from 'rxjs/operators';
+} from "@angular/core";
+import { Observable, Subject } from "rxjs";
+import { delay, takeUntil } from "rxjs/operators";
 
 @Directive({
-  selector: '[asyncData]',
+  selector: "[asyncData]",
 })
-export class SubContentDirective implements OnDestroy, OnChanges, OnInit {
+export class AsyncDataDirective implements OnDestroy, OnChanges, OnInit {
   constructor(
     private viewContainerRef: ViewContainerRef,
     private templateRef: TemplateRef<any>
   ) {}
 
-  @Input('asyncData')
+  @Input("asyncData")
   private currentContent$!: Observable<any>;
 
-  @Input('placeholder')
+  @Input("asyncDataPlaceholder")
   private placeholder: TemplateRef<any> | null = null;
-  
+
   private isContent: unknown;
   private subDestroy$ = new Subject();
 
@@ -56,7 +56,7 @@ export class SubContentDirective implements OnDestroy, OnChanges, OnInit {
   }
 
   ngOnDestroy() {
-    this.subDestroy$.next('');
+    this.subDestroy$.next("");
     this.subDestroy$.complete();
   }
 }
