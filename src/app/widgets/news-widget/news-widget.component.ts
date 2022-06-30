@@ -1,4 +1,5 @@
 import { Component, Input } from "@angular/core";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "app-news-widget",
@@ -6,6 +7,5 @@ import { Component, Input } from "@angular/core";
   styleUrls: ["./news-widget.component.scss"],
 })
 export class NewsWidgetComponent {
-  @Input() currentWidgetContent: any;
-  constructor() {}
+  @Input() currentWidgetContent: Observable<any> | null = null;
 }
