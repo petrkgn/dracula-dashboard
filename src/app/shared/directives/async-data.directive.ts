@@ -11,7 +11,7 @@ import { Observable, Subject } from 'rxjs';
 import { delay, takeUntil } from 'rxjs/operators';
 
 @Directive({
-  selector: '[subContent]',
+  selector: '[asyncData]',
 })
 export class SubContentDirective implements OnDestroy, OnChanges, OnInit {
   constructor(
@@ -19,12 +19,12 @@ export class SubContentDirective implements OnDestroy, OnChanges, OnInit {
     private templateRef: TemplateRef<any>
   ) {}
 
-  @Input('subContent')
+  @Input('asyncData')
   private currentContent$!: Observable<any>;
 
-  @Input('subContentHold')
+  @Input('placeholder')
   private placeholder: TemplateRef<any> | null = null;
-
+  
   private isContent: unknown;
   private subDestroy$ = new Subject();
 
