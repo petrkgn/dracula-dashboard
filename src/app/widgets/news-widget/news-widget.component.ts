@@ -1,15 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from "@angular/core";
 
 @Component({
-  selector: 'app-news-widget',
-  templateUrl: './news-widget.component.html',
-  styleUrls: ['./news-widget.component.scss']
+  selector: "app-news-widget",
+  templateUrl: "./news-widget.component.html",
+  styleUrls: ["./news-widget.component.scss"],
 })
-export class NewsWidgetComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+export class NewsWidgetComponent {
+  @Input() currentWidgetContent: any;
+  constructor() {}
 }
