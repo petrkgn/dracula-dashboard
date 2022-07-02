@@ -1,5 +1,6 @@
 import {
   Directive,
+  Inject,
   Input,
   OnChanges,
   OnDestroy,
@@ -7,16 +8,17 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from "@angular/core";
-import { Observable, Subject } from "rxjs";
-import { delay, takeUntil } from "rxjs/operators";
+import { Observable, of, Subject, throwError } from "rxjs";
+import { catchError, delay, takeUntil } from "rxjs/operators";
 
 @Directive({
   selector: "[asyncData]",
 })
-export class AsyncDataDirective implements OnDestroy, OnChanges, OnInit {
+export class AsyncDataDirective implements OnInit, OnChanges, OnDestroy {
   constructor(
-    private viewContainerRef: ViewContainerRef,
-    private templateRef: TemplateRef<any>
+    @Inject(ViewContainerRef)
+    private readonly viewContainerRef: ViewContainerRef,
+    @Inject(TemplateRef) private readonly templateRef: TemplateRef<any>
   ) {}
 
   @Input("asyncData")
@@ -42,11 +44,22 @@ export class AsyncDataDirective implements OnDestroy, OnChanges, OnInit {
   }
 
   private initCurrentContent(
-    currentContent$: Observable<any>,
+    currentContent: Observable<any>,
     subDestroy: Observable<any>
   ) {
-    currentContent$
-      .pipe(delay(0), takeUntil(subDestroy))
+    currentContent
+      .pipe(
+        delay(2000),
+        catchError((err) => {
+          // console.log("caught error and rethrowing", err);
+          return throwError(() => new Error(err));
+        }),
+        catchError((err) => {
+          // console.log("caught error, providing fallback value");
+          return of([{ title: `${err}, try later` }]);
+        }),
+        takeUntil(subDestroy)
+      )
       .subscribe((content) => {
         this.viewContainerRef.clear();
         this.viewContainerRef.createEmbeddedView(this.templateRef, {
