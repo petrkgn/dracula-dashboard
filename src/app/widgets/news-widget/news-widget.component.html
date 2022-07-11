@@ -1,4 +1,7 @@
-<ng-container *asyncData="currentWidgetContent; placeholder: placeholder; let news">
+<ng-container *asyncData="widgetContainer.currentWidgetContent;
+                          placeholder: placeholder; 
+                          fallback: 'Empty. Try later!'
+                          let news">
     <div class="view-container">
       <ul class="article">
         <li class="flow"  *ngFor="let article of news">
@@ -14,6 +17,7 @@
       </ul>
     </div>
   </ng-container>
+
   <ng-template #placeholder>
     <span><h3>Loading! Please wait...</h3></span>
   </ng-template>

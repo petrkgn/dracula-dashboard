@@ -1,69 +1,75 @@
 import {
+  ChangeDetectorRef,
   Directive,
   Inject,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   TemplateRef,
   ViewContainerRef,
 } from "@angular/core";
-import { Observable, of, Subject, throwError } from "rxjs";
-import { catchError, delay, takeUntil } from "rxjs/operators";
+import {
+  Observable,
+  of,
+  Subject,
+  throwError,
+  distinctUntilChanged,
+} from "rxjs";
+import { catchError, delay, takeUntil, tap } from "rxjs/operators";
 
 @Directive({
   selector: "[asyncData]",
 })
-export class AsyncDataDirective implements OnInit, OnChanges, OnDestroy {
+export class AsyncDataDirective implements OnInit, OnDestroy {
   constructor(
     @Inject(ViewContainerRef)
     private readonly viewContainerRef: ViewContainerRef,
-    @Inject(TemplateRef) private readonly templateRef: TemplateRef<any>
+    @Inject(TemplateRef) private readonly templateRef: TemplateRef<any>,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   @Input("asyncData")
-  private currentContent$!: Observable<any>;
-
-  @Input("asyncDataPlaceholder")
-  private placeholder: TemplateRef<any> | null = null;
-
-  private isContent: unknown;
-  private subDestroy$ = new Subject();
-
-  ngOnChanges() {
-    this.isContent = this.initCurrentContent(
-      this.currentContent$,
-      this.subDestroy$
-    );
+  private set isData(currentData$: Observable<any>) {
+    this.initCurrentData(currentData$, this.subDestroy$);
   }
 
+  @Input("asyncDataPlaceholder")
+  private readonly placeholder: TemplateRef<any> | null = null;
+
+  @Input("asyncDataFallback")
+  private readonly fallBack: string = "Try later";
+
+  private readonly subDestroy$ = new Subject();
+
   ngOnInit() {
-    if (!this.isContent && this.placeholder) {
+    if (!this.isData && this.placeholder) {
       this.viewContainerRef.createEmbeddedView(this.placeholder);
     }
   }
 
-  private initCurrentContent(
-    currentContent: Observable<any>,
-    subDestroy: Observable<any>
+  private initCurrentData(
+    currentData$: Observable<any>,
+    subDestroy$: Observable<any>
   ) {
-    currentContent
+    currentData$
       .pipe(
         delay(2000),
         catchError((err) => {
-          // console.log("caught error and rethrowing", err);
+          console.log("caught error and rethrowing farther", err);
           return throwError(() => new Error(err));
         }),
-        catchError((err) => {
-          // console.log("caught error, providing fallback value");
-          return of([{ title: `${err}, try later` }]);
+        catchError(() => {
+          // console.log("caught error and return fallback value");
+          return of([{ title: this.fallBack }]);
         }),
-        takeUntil(subDestroy)
+        distinctUntilChanged(),
+        tap(() => this.cdr.markForCheck()),
+        takeUntil(subDestroy$)
       )
-      .subscribe((content) => {
+      .subscribe((data) => {
         this.viewContainerRef.clear();
         this.viewContainerRef.createEmbeddedView(this.templateRef, {
-          $implicit: content,
+          $implicit: data,
         });
       });
   }
