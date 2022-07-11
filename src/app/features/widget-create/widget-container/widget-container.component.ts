@@ -17,9 +17,9 @@ import { WIDGET_LIST } from "../widget-list.token";
   templateUrl: "./widget-container.component.html",
   styleUrls: ["./widget-container.component.scss"],
   providers: [WidgetContentService],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WidgetContainerComponent implements OnInit, DoCheck {
+export class WidgetContainerComponent implements OnInit {
   public widgetContext: string = "news";
   public currentWidgetContent: Observable<any> = {} as Observable<any>;
   public widgetTemplate: any;
@@ -27,17 +27,12 @@ export class WidgetContainerComponent implements OnInit, DoCheck {
   constructor(
     @Inject(WIDGET_CONFIG) private widgetConfig: Record<string, any>,
     @Inject(WIDGET_LIST) private readonly widgetList: Map<string, {}>,
-    private readonly contentService: WidgetContentService
-  ) // private readonly cdr: ChangeDetectorRef
-  {}
+    private readonly contentService: WidgetContentService // private readonly cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.setWidgetTemplate();
     this.setCurrentWidgetContent();
-  }
-
-  ngDoCheck(): void {
-    // this.cdr.markForCheck();
   }
 
   setWidgetTemplate() {
