@@ -34,10 +34,10 @@ export class AsyncDataDirective implements OnInit, OnDestroy {
   }
 
   @Input("asyncDataPlaceholder")
-  private readonly placeholder: TemplateRef<any> | null = null;
+  private readonly placeholder?: TemplateRef<any>;
 
   @Input("asyncDataFallback")
-  private readonly fallBack: string = "Try later";
+  private readonly fallBack?: string = "Try later";
 
   private readonly subDestroy$ = new Subject();
 
