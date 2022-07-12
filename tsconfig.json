@@ -1,13 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "strict": true,
-    "baseUrl": "./src",
-    "paths": {
-      "@shared/*": ["app/shared/*"],
-      "@widgets/*": ["app/widgets/*"],
-      "@features/*": ["app/features/*"],
-    },
+    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
