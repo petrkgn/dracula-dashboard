@@ -1,9 +1,8 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  DoCheck,
   Inject,
+  Input,
   OnInit,
 } from "@angular/core";
 import { Observable } from "rxjs";
@@ -20,6 +19,7 @@ import { WIDGET_LIST } from "../widget-list.token";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetContainerComponent implements OnInit {
+  @Input()
   public widgetContext: string = "news";
   public currentWidgetContent: Observable<any> = {} as Observable<any>;
   public widgetTemplate: any;
@@ -27,7 +27,7 @@ export class WidgetContainerComponent implements OnInit {
   constructor(
     @Inject(WIDGET_CONFIG) private widgetConfig: Record<string, any>,
     @Inject(WIDGET_LIST) private readonly widgetList: Map<string, {}>,
-    private readonly contentService: WidgetContentService // private readonly cdr: ChangeDetectorRef
+    private readonly contentService: WidgetContentService
   ) {}
 
   ngOnInit(): void {
